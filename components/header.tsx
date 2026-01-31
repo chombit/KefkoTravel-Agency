@@ -3,9 +3,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, Phone, Globe } from "lucide-react"
+import { motion } from "framer-motion"
 import { useLanguage } from "@/lib/language-context"
 import {
   DropdownMenu,
@@ -17,6 +19,7 @@ import {
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { language, setLanguage, t } = useLanguage()
+  const pathname = usePathname()
 
   const navigation = [
     { name: t.nav.home, href: "/" },
@@ -27,8 +30,25 @@ export function Header() {
     { name: t.nav.contact, href: "/contact" },
   ]
 
+  const mobileMenuVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <motion.header 
+      key={pathname}
+      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -45,14 +65,25 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
-            {navigation.map((item) => (
-              <Link
+            {navigation.map((item, index) => (
+              <motion.div
                 key={item.name}
-                href={item.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                {item.name}
-              </Link>
+                <Link
+                  href={item.href}
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
+                >
+                  {item.name}
+                  <motion.span
+                    className="absolute -bottom-1 left-0 h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300"
+                    initial={{ width: 0 }}
+                    whileHover={{ width: "100%" }}
+                  />
+                </Link>
+              </motion.div>
             ))}
           </nav>
 
@@ -80,7 +111,9 @@ export function Header() {
               <Phone className="h-4 w-4" />
               <span>+251 925 79 15 88</span>
             </a>
-            <Button>{t.nav.bookNow}</Button>
+            <Link href="/">
+              <Button>{t.nav.bookNow}</Button>
+            </Link>
           </div>
 
           {/* Mobile Menu */}
@@ -121,15 +154,27 @@ export function Header() {
                     />
                   </Link>
                   <nav className="flex flex-col gap-4">
-                    {navigation.map((item) => (
-                      <Link
+                    {navigation.map((item, index) => (
+                      <motion.div
                         key={item.name}
-                        href={item.href}
-                        className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
-                        onClick={() => setIsOpen(false)}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
                       >
-                        {item.name}
-                      </Link>
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors block py-2 relative group"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.name}
+                          <motion.span
+                            className="absolute -bottom-1 left-0 h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300"
+                            initial={{ width: 0 }}
+                            whileHover={{ width: "100%" }}
+                          />
+                        </Link>
+                      </motion.div>
                     ))}
                   </nav>
                   <div className="flex flex-col gap-4 pt-4 border-t">
@@ -137,7 +182,9 @@ export function Header() {
                       <Phone className="h-4 w-4" />
                       <span>+251 925 79 15 88</span>
                     </a>
-                    <Button className="w-full" onClick={() => setIsOpen(false)}>{t.nav.bookNow}</Button>
+                    <Link href="/" className="w-full">
+                      <Button className="w-full" onClick={() => setIsOpen(false)}>{t.nav.bookNow}</Button>
+                    </Link>
                   </div>
                 </div>
               </SheetContent>
@@ -145,6 +192,6 @@ export function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   )
 }

@@ -3,6 +3,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Phone, Mail, MapPin, Facebook, Instagram, MessageCircle, Send } from "lucide-react"
+import { motion } from "framer-motion"
+import { ScrollReveal } from "@/components/scroll-reveal"
 import { Separator } from "@/components/ui/separator"
 import { useLanguage } from "@/lib/language-context"
 
@@ -36,19 +38,25 @@ export function Footer() {
   return (
     <footer className="bg-foreground text-background">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-6">
-              <Image
-                src="/logo.png"
-                alt="Kefko Travel Agent - Let's Fly Together"
-                width={400}
-                height={100}
-                className="h-20 w-auto object-contain"
-                priority
-              />
-            </Link>
+        <ScrollReveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+            {/* Brand */}
+            <div className="lg:col-span-2">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Link href="/" className="inline-block mb-6">
+                  <Image
+                    src="/logo.png"
+                    alt="Kefko Travel Agent - Let's Fly Together"
+                    width={400}
+                    height={100}
+                    className="h-20 w-auto object-contain"
+                    priority
+                  />
+                </Link>
+              </motion.div>
             <p className="text-background/70 mb-6 max-w-sm">
               {t.footer.description}
             </p>
@@ -117,18 +125,21 @@ export function Footer() {
               ))}
             </ul>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
 
         <Separator className="my-8 bg-background/20" />
 
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-background/60 text-sm">
-            {`© ${new Date().getFullYear()} ${t.footer.copyright}`}
-          </p>
-          <p className="text-background/60 text-sm italic">
-            {`"${t.footer.tagline}"`}
-          </p>
-        </div>
+        <ScrollReveal delay={0.3}>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-background/60 text-sm">
+              {`© ${new Date().getFullYear()} ${t.footer.copyright}`}
+            </p>
+            <p className="text-background/60 text-sm italic">
+              {`"${t.footer.tagline}"`}
+            </p>
+          </div>
+        </ScrollReveal>
       </div>
     </footer>
   )

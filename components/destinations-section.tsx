@@ -5,6 +5,8 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Star } from "lucide-react"
+import { motion } from "framer-motion"
+import { ScrollReveal } from "@/components/scroll-reveal"
 import { useLanguage } from "@/lib/language-context"
 import { DestinationModal } from "@/components/destination-modal"
 
@@ -72,11 +74,15 @@ export function DestinationsSection() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {destinations.map((destination) => (
-              <div
-                key={destination.id}
-                className="group relative bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-              >
+            {destinations.map((destination, index) => (
+              <ScrollReveal key={destination.id} delay={index * 0.15}>
+                <motion.div
+                  whileHover={{ 
+                    y: -8,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="group relative bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+                >
                 {/* Image */}
                 <div className="relative h-72 overflow-hidden">
                   <Image
@@ -116,7 +122,8 @@ export function DestinationsSection() {
                     {t.destinations.viewDetails}
                   </Button>
                 </div>
-              </div>
+                </motion.div>
+              </ScrollReveal>
             ))}
           </div>
         </div>

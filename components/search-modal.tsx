@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -131,7 +132,9 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
                     </div>
                     <div className="text-right">
                       <p className="text-xl font-bold text-primary">{flight.price}</p>
-                      <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
+                      <Link href="/">
+                        <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>
@@ -166,7 +169,9 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
                     <div className="text-right">
                       <p className="text-xl font-bold text-primary">{hotel.price}</p>
                       <p className="text-xs text-muted-foreground">per night</p>
-                      <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
+                      <Link href="/">
+                        <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>
@@ -200,7 +205,9 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
                     </div>
                     <div className="text-right">
                       <p className="text-xl font-bold text-primary">{car.price}</p>
-                      <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
+                      <Link href="/">
+                        <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>

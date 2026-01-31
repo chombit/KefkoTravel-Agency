@@ -2,7 +2,10 @@ import React from "react"
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display, Noto_Sans_Ethiopic } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Toaster } from '@/components/ui/toaster'
 import { LanguageProvider } from '@/lib/language-context'
+import { PageTransitionWrapper } from '@/components/page-transition-wrapper'
+import { ScrollToTop } from '@/components/scroll-to-top'
 import './globals.css'
 
 const _inter = Inter({ subsets: ["latin"] });
@@ -41,8 +44,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
         <LanguageProvider>
-          {children}
+          <PageTransitionWrapper>
+            {children}
+          </PageTransitionWrapper>
+          <ScrollToTop />
         </LanguageProvider>
+        <Toaster />
         <Analytics />
       </body>
     </html>

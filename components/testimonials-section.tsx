@@ -3,6 +3,8 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, Quote } from "lucide-react"
+import { motion } from "framer-motion"
+import { ScrollReveal } from "@/components/scroll-reveal"
 import { useLanguage } from "@/lib/language-context"
 
 export function TestimonialsSection() {
@@ -46,25 +48,41 @@ export function TestimonialsSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {testimonials.map((testimonial) => (
-            <Card 
-              key={testimonial.name}
-              className="border-border/50 hover:shadow-lg transition-shadow duration-300"
-            >
-              <CardContent className="p-8">
-                <Quote className="h-10 w-10 text-primary/20 mb-4" />
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-accent text-accent" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {`"${testimonial.text}"`}
-                </p>
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-12 w-12 bg-primary/10">
-                    <AvatarFallback className="bg-primary/10 text-primary font-medium">
-                      {testimonial.initials}
+          {testimonials.map((testimonial, index) => (
+            <ScrollReveal key={testimonial.name} delay={index * 0.2}>
+              <motion.div
+                whileHover={{ 
+                  y: -5,
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <Card className="border-border/50 hover:shadow-lg transition-shadow duration-300">
+                  <CardContent className="p-8">
+                    <motion.div
+                      whileHover={{ scale: 1.05, rotate: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Quote className="h-10 w-10 text-primary/20 mb-4" />
+                    </motion.div>
+                    <div className="flex gap-1 mb-4">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: index * 0.2 + i * 0.1 }}
+                        >
+                          <Star className="h-4 w-4 fill-accent text-accent" />
+                        </motion.div>
+                      ))}
+                    </div>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                      {`"${testimonial.text}"`}
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-12 w-12 bg-primary/10">
+                        <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                          {testimonial.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div>
@@ -74,6 +92,8 @@ export function TestimonialsSection() {
                 </div>
               </CardContent>
             </Card>
+            </motion.div>
+          </ScrollReveal>
           ))}
         </div>
       </div>

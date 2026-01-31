@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Check, Plane, ArrowRight } from "lucide-react"
@@ -115,12 +116,14 @@ export function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                <Button 
-                  className={`w-full gap-2 ${pkg.popular ? "" : "bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"}`}
-                >
-                  {t.pricing.bookNow}
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+                <Link href="/">
+                  <Button 
+                    className={`w-full gap-2 ${pkg.popular ? "" : "bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"}`}
+                  >
+                    {t.pricing.bookNow}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}

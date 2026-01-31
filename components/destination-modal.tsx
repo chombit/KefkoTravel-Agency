@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
@@ -292,7 +293,9 @@ export function DestinationModal({ isOpen, onClose, destination }: DestinationMo
                           <p className="text-2xl font-bold text-foreground">{pkg.price} ETB</p>
                           <p className="text-xs text-muted-foreground">{labels.perPerson}</p>
                         </div>
-                        <Button className="w-full md:w-auto">{labels.bookPackage}</Button>
+                        <Link href="/">
+                          <Button className="w-full md:w-auto">{labels.bookPackage}</Button>
+                        </Link>
                       </div>
                     </div>
                   </CardContent>

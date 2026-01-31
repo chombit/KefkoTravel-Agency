@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -7,9 +8,106 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import { useToast } from "@/hooks/use-toast"
 
 export function ContactSection() {
   const { t } = useLanguage()
+  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    message: ""
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Name is required"
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required"
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email"
+    }
+    
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone is required"
+    } else if (!/^[+]?[\d\s\-\(\)]+$/.test(formData.phone)) {
+      newErrors.phone = "Please enter a valid phone number"
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required"
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters"
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!validateForm()) {
+      return
+    }
+    
+    setIsSubmitting(true)
+    
+    try {
+      // EmailJS implementation
+      const emailjs = (await import('@emailjs/browser')).default
+      
+      await emailjs.send(
+        'service_afwksgm',    // Your EmailJS service ID
+        'template_qrsg8yz',    // Your EmailJS template ID (replace with actual template ID)
+        {
+          from_name: formData.fullName,
+          from_email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+          to_email: 'info@kefkotravelagency.com'
+        },
+        '4iXX1CNX-XBw4QyEd'      // Your EmailJS public key
+      )
+      
+      toast({
+        title: "Thank You! 🎉",
+        description: "Your message has been sent successfully. We'll respond within 24 hours.",
+      })
+      
+      // Reset form
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        message: ""
+      })
+      setErrors({})
+    } catch (error) {
+      toast({
+        title: "Error Sending Message",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: "" }))
+    }
+  }
 
   const contactInfo = [
     {
@@ -52,30 +150,68 @@ export function ContactSection() {
           <Card className="border-border/50">
             <CardContent className="p-8">
               <h3 className="text-xl font-semibold text-foreground mb-6">{t.contact.form.title}</h3>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">{t.contact.form.name}</Label>
-                  <Input id="fullName" placeholder={t.contact.form.namePlaceholder} />
+                  <Input 
+                    id="fullName" 
+                    placeholder={t.contact.form.namePlaceholder}
+                    value={formData.fullName}
+                    onChange={(e) => handleInputChange("fullName", e.target.value)}
+                    className={errors.fullName ? "border-red-500" : ""}
+                  />
+                  {errors.fullName && (
+                    <p className="text-sm text-red-500">{errors.fullName}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">{t.contact.form.email}</Label>
-                  <Input id="email" type="email" placeholder={t.contact.form.emailPlaceholder} />
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder={t.contact.form.emailPlaceholder}
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className={errors.email ? "border-red-500" : ""}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500">{errors.email}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">{t.contact.form.phone}</Label>
-                  <Input id="phone" type="tel" placeholder={t.contact.form.phonePlaceholder} />
+                  <Input 
+                    id="phone" 
+                    type="tel" 
+                    placeholder={t.contact.form.phonePlaceholder}
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    className={errors.phone ? "border-red-500" : ""}
+                  />
+                  {errors.phone && (
+                    <p className="text-sm text-red-500">{errors.phone}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">{t.contact.form.message}</Label>
                   <Textarea 
                     id="message" 
                     placeholder={t.contact.form.messagePlaceholder}
-                    className="min-h-32 resize-none"
+                    className={`min-h-32 resize-none ${errors.message ? "border-red-500" : ""}`}
+                    value={formData.message}
+                    onChange={(e) => handleInputChange("message", e.target.value)}
                   />
+                  {errors.message && (
+                    <p className="text-sm text-red-500">{errors.message}</p>
+                  )}
                 </div>
-                <Button className="w-full gap-2">
+                <Button 
+                  type="submit" 
+                  className="w-full gap-2"
+                  disabled={isSubmitting}
+                >
                   <Send className="h-4 w-4" />
-                  {t.contact.form.submit}
+                  {isSubmitting ? "Sending..." : t.contact.form.submit}
                 </Button>
               </form>
             </CardContent>
