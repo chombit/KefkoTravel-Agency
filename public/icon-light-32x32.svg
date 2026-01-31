@@ -1,0 +1,21 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="8" fill="white"/>
+  
+  <!-- Kefko Logo - Mini Version -->
+  <g transform="translate(16, 16)">
+    <!-- Black Circle -->
+    <circle cx="-4" cy="0" r="6" fill="#000000"/>
+    
+    <!-- Blue Circle (overlapping) -->
+    <circle cx="4" cy="0" r="6" fill="#0066CC"/>
+    
+    <!-- White Dashed Line (Flight Path) -->
+    <path d="M -8 0 Q 0 -3, 8 0 T 16 0" 
+          stroke="white" 
+          stroke-width="1.5" 
+          stroke-dasharray="2 1.5" 
+          fill="none"
+          stroke-linecap="round"/>
+  </g>
+</svg>

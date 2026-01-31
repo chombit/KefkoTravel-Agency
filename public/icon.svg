@@ -1,0 +1,36 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @media (prefers-color-scheme: light) {
+      .background { fill: white; }
+      .circle1 { fill: #000000; }
+      .circle2 { fill: #0066CC; }
+      .path { stroke: white; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .background { fill: #1a1a1a; }
+      .circle1 { fill: #000000; }
+      .circle2 { fill: #0066CC; }
+      .path { stroke: white; }
+    }
+  </style>
+  
+  <!-- Background -->
+  <rect class="background" width="180" height="180" rx="40" />
+  
+  <!-- Kefko Logo - Simplified Version -->
+  <g transform="translate(90, 90)">
+    <!-- Black Circle -->
+    <circle class="circle1" cx="-8" cy="0" r="25" />
+    
+    <!-- Blue Circle (overlapping) -->
+    <circle class="circle2" cx="8" cy="0" r="25" />
+    
+    <!-- White Dashed Line (Flight Path) -->
+    <path class="path"
+          d="M -25 0 Q 0 -15, 25 0 T 75 0" 
+          stroke-width="3" 
+          stroke-dasharray="6 4" 
+          fill="none"
+          stroke-linecap="round"/>
+  </g>
+</svg>
