@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Phone, Mail, MapPin } from "lucide-react"
+import { Phone, Mail, MapPin, Facebook, Instagram, MessageCircle, Send } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { useLanguage } from "@/lib/language-context"
 
@@ -18,13 +18,11 @@ export function Footer() {
       { name: t.services.items.cars.title, href: "/#services" },
       { name: t.services.items.insurance.title, href: "/#services" },
     ],
-    destinations: [
-      { name: t.hero.destinations.dubai, href: "/#destinations" },
-      { name: t.hero.destinations.cairo, href: "/#destinations" },
-      { name: t.hero.destinations.nairobi, href: "/#destinations" },
-      { name: t.hero.destinations.istanbul, href: "/#destinations" },
-      { name: t.hero.destinations.bangkok, href: "/#destinations" },
-      { name: t.hero.destinations.london, href: "/#destinations" },
+    social: [
+      { name: "Facebook", href: "https://facebook.com/kefkotravel", icon: Facebook },
+      { name: "Instagram", href: "https://instagram.com/kefkotravel", icon: Instagram },
+      { name: "Telegram", href: "https://t.me/kefkotravel", icon: Send },
+      { name: "WhatsApp", href: "https://wa.me/251925791588", icon: MessageCircle },
     ],
     company: [
       { name: t.nav.about, href: "/about" },
@@ -84,18 +82,26 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Destinations */}
+          {/* Social Media */}
           <div>
-            <h4 className="font-semibold text-background mb-4">{t.footer.sections.destinations}</h4>
-            <ul className="space-y-3">
-              {footerLinks.destinations.map((link) => (
-                <li key={link.name}>
-                  <Link href={link.href} className="text-background/70 hover:text-background transition-colors">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h4 className="font-semibold text-background mb-4">Follow Us</h4>
+            <div className="flex flex-col gap-3">
+              {footerLinks.social.map((social) => {
+                const IconComponent = social.icon
+                return (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-background/70 hover:text-background transition-colors"
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    <span>{social.name}</span>
+                  </a>
+                )
+              })}
+            </div>
           </div>
 
           {/* Company */}

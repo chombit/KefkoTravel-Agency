@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import Image from "next/image"
 import { Users, Award, Globe, HeartHandshake } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
@@ -51,6 +52,22 @@ export function AboutSection() {
           </p>
         </div>
 
+        {/* Mission & Vision */}
+        <div className="mt-20 mb-20 grid md:grid-cols-2 gap-8">
+          <div className="bg-primary/5 rounded-xl p-8 border border-primary/10">
+            <h4 className="text-xl font-serif font-bold text-foreground mb-4">{t.about.mission.title}</h4>
+            <p className="text-muted-foreground leading-relaxed">
+              {t.about.mission.description}
+            </p>
+          </div>
+          <div className="bg-accent/5 rounded-xl p-8 border border-accent/10">
+            <h4 className="text-xl font-serif font-bold text-foreground mb-4">{t.about.vision.title}</h4>
+            <p className="text-muted-foreground leading-relaxed">
+              {t.about.vision.description}
+            </p>
+          </div>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
           {stats.map((stat) => (
@@ -100,22 +117,6 @@ export function AboutSection() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Mission & Vision */}
-        <div className="mt-20 grid md:grid-cols-2 gap-8">
-          <div className="bg-primary/5 rounded-xl p-8 border border-primary/10">
-            <h4 className="text-xl font-serif font-bold text-foreground mb-4">{t.about.mission.title}</h4>
-            <p className="text-muted-foreground leading-relaxed">
-              {t.about.mission.description}
-            </p>
-          </div>
-          <div className="bg-accent/5 rounded-xl p-8 border border-accent/10">
-            <h4 className="text-xl font-serif font-bold text-foreground mb-4">{t.about.vision.title}</h4>
-            <p className="text-muted-foreground leading-relaxed">
-              {t.about.vision.description}
-            </p>
           </div>
         </div>
       </div>
