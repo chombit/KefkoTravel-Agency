@@ -11,27 +11,27 @@ export function Footer() {
 
   const footerLinks = {
     services: [
-      { name: t.services.items.flights.title, href: "#services" },
-      { name: t.services.items.hotels.title, href: "#services" },
-      { name: t.services.items.tours.title, href: "#services" },
-      { name: t.services.items.visa.title, href: "#services" },
-      { name: t.services.items.cars.title, href: "#services" },
-      { name: t.services.items.insurance.title, href: "#services" },
+      { name: t.services.items.flights.title, href: "/#services" },
+      { name: t.services.items.hotels.title, href: "/#services" },
+      { name: t.services.items.tours.title, href: "/#services" },
+      { name: t.services.items.visa.title, href: "/#services" },
+      { name: t.services.items.cars.title, href: "/#services" },
+      { name: t.services.items.insurance.title, href: "/#services" },
     ],
     destinations: [
-      { name: t.hero.destinations.dubai, href: "#destinations" },
-      { name: t.hero.destinations.cairo, href: "#destinations" },
-      { name: t.hero.destinations.nairobi, href: "#destinations" },
-      { name: t.hero.destinations.istanbul, href: "#destinations" },
-      { name: t.hero.destinations.bangkok, href: "#destinations" },
-      { name: t.hero.destinations.london, href: "#destinations" },
+      { name: t.hero.destinations.dubai, href: "/#destinations" },
+      { name: t.hero.destinations.cairo, href: "/#destinations" },
+      { name: t.hero.destinations.nairobi, href: "/#destinations" },
+      { name: t.hero.destinations.istanbul, href: "/#destinations" },
+      { name: t.hero.destinations.bangkok, href: "/#destinations" },
+      { name: t.hero.destinations.london, href: "/#destinations" },
     ],
     company: [
-      { name: t.nav.about, href: "#about" },
-      { name: t.about.team.tagline, href: "#team" },
-      { name: t.nav.pricing, href: "#pricing" },
-      { name: t.testimonials.tagline, href: "#testimonials" },
-      { name: t.nav.contact, href: "#contact" },
+      { name: t.nav.about, href: "/about" },
+      { name: t.about.team.tagline, href: "/#team" },
+      { name: t.nav.pricing, href: "/pricing" },
+      { name: t.testimonials.tagline, href: "/#testimonials" },
+      { name: t.nav.contact, href: "/contact" },
     ],
   }
 
@@ -45,9 +45,10 @@ export function Footer() {
               <Image
                 src="/logo.png"
                 alt="Kefko Travel Agent - Let's Fly Together"
-                width={160}
-                height={60}
-                className="h-16 w-auto object-contain brightness-0 invert"
+                width={400}
+                height={100}
+                className="h-20 w-auto object-contain"
+                priority
               />
             </Link>
             <p className="text-background/70 mb-6 max-w-sm">

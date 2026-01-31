@@ -19,12 +19,12 @@ export function Header() {
   const { language, setLanguage, t } = useLanguage()
 
   const navigation = [
-    { name: t.nav.home, href: "#" },
-    { name: t.nav.services, href: "#services" },
-    { name: t.nav.destinations, href: "#destinations" },
-    { name: t.nav.about, href: "#about" },
-    { name: t.nav.pricing, href: "#pricing" },
-    { name: t.nav.contact, href: "#contact" },
+    { name: t.nav.home, href: "/" },
+    { name: t.nav.services, href: "/#services" },
+    { name: t.nav.destinations, href: "/#destinations" },
+    { name: t.nav.about, href: "/about" },
+    { name: t.nav.pricing, href: "/pricing" },
+    { name: t.nav.contact, href: "/contact" },
   ]
 
   return (
@@ -36,8 +36,8 @@ export function Header() {
             <Image
               src="/logo.png"
               alt="Kefko Travel Agent - Let's Fly Together"
-              width={140}
-              height={50}
+              width={160}
+              height={80}
               className="h-12 w-auto object-contain"
               priority
             />

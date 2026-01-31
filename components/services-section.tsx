@@ -1,7 +1,7 @@
 "use client"
 
 import { Plane, Building2, Car, FileText, Shield, MapPin } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useLanguage } from "@/lib/language-context"
 
 export function ServicesSection() {
