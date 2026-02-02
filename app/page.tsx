@@ -3,6 +3,7 @@
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { ServicesSection } from "@/components/services-section"
+import { AirlineShowcase } from "@/components/airline-showcase"
 import { DestinationsSection } from "@/components/destinations-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { Footer } from "@/components/footer"
@@ -14,6 +15,7 @@ export default function Home() {
       <Header />
       <HeroSection />
       <ServicesSection />
+      <AirlineShowcase />
       <DestinationsSection />
       <TestimonialsSection />
       <Footer />
