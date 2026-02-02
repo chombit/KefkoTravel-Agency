@@ -132,11 +132,11 @@ export function Footer() {
 
         <ScrollReveal delay={0.3}>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-background/60 text-sm">
-              {`© ${new Date().getFullYear()} ${t.footer.copyright}`}
+            <p className="text-background/80 text-sm font-medium">
+              © {new Date().getFullYear()} {t.footer.copyright}
             </p>
             <p className="text-background/60 text-sm italic">
-              {`"${t.footer.tagline}"`}
+              "{t.footer.tagline}"
             </p>
           </div>
         </ScrollReveal>
