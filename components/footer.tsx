@@ -130,16 +130,14 @@ export function Footer() {
 
         <Separator className="my-8 bg-background/20" />
 
-        <ScrollReveal delay={0.3}>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-background/80 text-sm font-medium">
-              © {new Date().getFullYear()} {t.footer.copyright}
-            </p>
-            <p className="text-background/60 text-sm italic">
-              "{t.footer.tagline}"
-            </p>
-          </div>
-        </ScrollReveal>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 bg-background/10 rounded-lg px-6">
+          <p className="text-background font-semibold text-base">
+            © {new Date().getFullYear()} {t.footer.copyright}
+          </p>
+          <p className="text-background/80 text-sm italic">
+            "{t.footer.tagline}"
+          </p>
+        </div>
       </div>
     </footer>
   )
