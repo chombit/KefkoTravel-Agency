@@ -7,6 +7,7 @@ import { LanguageProvider } from '@/lib/language-context'
 import { PageTransitionWrapper } from '@/components/page-transition-wrapper'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { StructuredData } from '@/components/structured-data'
+import { AuthProvider } from '@/contexts/auth-context'
 import './globals.css'
 
 const inter = Inter({ 
@@ -121,12 +122,14 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body className={`${inter.className} font-sans antialiased`}>
-        <LanguageProvider>
-          <PageTransitionWrapper>
-            {children}
-          </PageTransitionWrapper>
-          <ScrollToTop />
-        </LanguageProvider>
+        <AuthProvider>
+            <LanguageProvider>
+              <PageTransitionWrapper>
+                {children}
+              </PageTransitionWrapper>
+              <ScrollToTop />
+            </LanguageProvider>
+          </AuthProvider>
         <Toaster />
         <Analytics />
       </body>

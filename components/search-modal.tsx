@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Plane, Building2, Car, FileText, Clock, MapPin, Phone, MessageCircle, Star, Users, Briefcase, Calendar } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import { useAuth } from "@/contexts/auth-context"
 
 interface SearchResult {
   type: "flight" | "hotel" | "car" | "visa"
@@ -29,6 +30,7 @@ interface SearchModalProps {
 
 export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
   const { t } = useLanguage()
+  const { user, isLoading } = useAuth()
 
   if (!searchData) return null
 
@@ -81,13 +83,42 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
     ]
   }
 
+  const handleBooking = (item: any, type: string) => {
+    if (isLoading) {
+      return
+    }
+    
+    if (!user) {
+      // Redirect to sign in if not logged in
+      window.location.href = '/auth/signin'
+      return
+    }
+
+    // Safety check for price
+    let price = '0'
+    if (item.price) {
+      price = item.price.toString()
+    } else if (item.basePrice) {
+      price = item.basePrice.toString()
+    }
+    
+    // Redirect to booking page with details
+    const params = new URLSearchParams({
+      type: searchData.type,
+      destination: searchData.destination || searchData.to || `${searchData.from} → ${searchData.to}`,
+      price: price.replace(/[^0-9.]/g, '')
+    })
+    
+    window.location.href = `/book?${params.toString()}`
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-3">
             {getIcon()}
-            <div>
+            <div className="flex-1">
               <DialogTitle className="text-xl">{getTitle()} - {t.search?.results || "Search Results"}</DialogTitle>
               <DialogDescription>
                 {searchData.type === "flight" && searchData.from && searchData.to && (
@@ -132,9 +163,13 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
                     </div>
                     <div className="text-right">
                       <p className="text-xl font-bold text-primary">{flight.price}</p>
-                      <Link href="/">
-                        <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
-                      </Link>
+                      <Button 
+                        size="sm" 
+                        className="mt-2" 
+                        onClick={() => handleBooking(flight, `flight-${index}`)}
+                      >
+                        {t.search?.book || "Book Now"}
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -169,9 +204,13 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
                     <div className="text-right">
                       <p className="text-xl font-bold text-primary">{hotel.price}</p>
                       <p className="text-xs text-muted-foreground">per night</p>
-                      <Link href="/">
-                        <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
-                      </Link>
+                      <Button 
+                        size="sm" 
+                        className="mt-2" 
+                        onClick={() => handleBooking(hotel, `hotel-${index}`)}
+                      >
+                        {t.search?.book || "Book Now"}
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -205,9 +244,13 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
                     </div>
                     <div className="text-right">
                       <p className="text-xl font-bold text-primary">{car.price}</p>
-                      <Link href="/">
-                        <Button size="sm" className="mt-2">{t.search?.book || "Book Now"}</Button>
-                      </Link>
+                      <Button 
+                        size="sm" 
+                        className="mt-2" 
+                        onClick={() => handleBooking(car, `car-${index}`)}
+                      >
+                        {t.search?.book || "Book Now"}
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -256,7 +299,11 @@ export function SearchModal({ isOpen, onClose, searchData }: SearchModalProps) {
               </CardContent>
             </Card>
 
-            <Button className="w-full gap-2" size="lg">
+            <Button 
+              className="w-full gap-2" 
+              size="lg"
+              onClick={() => handleBooking(visaInfo, 'visa')}
+            >
               <FileText className="h-4 w-4" />
               {t.search?.applyNow || "Apply Now"}
             </Button>

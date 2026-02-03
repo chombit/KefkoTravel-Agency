@@ -5,10 +5,11 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Phone, Globe } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Menu, Phone, Globe, User, LogOut, Settings } from "lucide-react"
 import { motion } from "framer-motion"
 import { useLanguage } from "@/lib/language-context"
+import { useAuth } from "@/contexts/auth-context"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,9 +18,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function Header() {
+  const { user, signOut } = useAuth()
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const { language, setLanguage, t } = useLanguage()
-  const pathname = usePathname()
 
   const navigation = [
     { name: t.nav.home, href: "/" },
@@ -107,6 +109,45 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
             
+            {/* Auth Buttons */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <User className="h-4 w-4" />
+                    <span className="font-medium">{user?.name}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href={user?.role === 'ADMIN' || user?.role === 'AGENT' ? '/dashboard' : '/bookings'}>
+                      <User className="h-4 w-4 mr-2" />
+                      {user?.role === 'ADMIN' || user?.role === 'AGENT' ? 'Dashboard' : 'My Bookings'}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/auth/signin">
+                  <Button variant="ghost" size="sm">Sign In</Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button size="sm">Sign Up</Button>
+                </Link>
+              </div>
+            )}
+            
             <a href="tel:+251925791588" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
               <Phone className="h-4 w-4" />
               <span>+251 925 79 15 88</span>
@@ -143,6 +184,9 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle>Menu</SheetTitle>
+                </SheetHeader>
                 <div className="flex flex-col gap-6 mt-8">
                   <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
                     <Image

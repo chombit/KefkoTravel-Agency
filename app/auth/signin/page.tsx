@@ -1,0 +1,208 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Loader2, Eye, EyeOff, Plane } from "lucide-react"
+import { motion } from "framer-motion"
+import { useLanguage } from "@/lib/language-context"
+import { useAuth } from "@/contexts/auth-context"
+
+export default function SignIn() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const router = useRouter()
+  const { t } = useLanguage()
+  const { user, isLoading: authLoading, signIn } = useAuth()
+
+  // Redirect based on user role if already signed in
+  useEffect(() => {
+    if (!authLoading && user) {
+      if (user.role === 'ADMIN' || user.role === 'AGENT') {
+        router.push("/dashboard")
+      } else {
+        router.push("/bookings")
+      }
+    }
+  }, [user, authLoading, router])
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/5 p-4">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  // If user is already signed in, don't render the sign-in form
+  if (user) {
+    return null
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch("/api/auth/signin-mongo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || "Invalid email or password")
+      } else {
+        // Use AuthContext to sign in
+        signIn(data.user)
+        // Redirect based on user role
+        if (data.user.role === 'ADMIN' || data.user.role === 'AGENT') {
+          router.push("/dashboard")
+        } else {
+          router.push("/bookings")
+        }
+        router.refresh()
+      }
+    } catch (error) {
+      setError("Something went wrong. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/5 p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <Card className="shadow-xl border-0">
+          <CardHeader className="text-center pb-6">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.3 }}
+              className="mx-auto mb-4"
+            >
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                <Plane className="w-8 h-8 text-primary" />
+              </div>
+            </motion.div>
+            <CardTitle className="text-2xl font-bold text-foreground">
+              Welcome Back
+            </CardTitle>
+            <CardDescription className="text-muted-foreground">
+              Sign in to your Kefko Travel account
+            </CardDescription>
+          </CardHeader>
+          
+          <CardContent className="space-y-4">
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              </motion.div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="h-11 pr-10"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-11"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </form>
+
+            <div className="text-center space-y-4">
+              <div className="text-sm text-muted-foreground">
+                Don't have an account?{" "}
+                <Link href="/auth/signup" className="text-primary hover:underline font-medium">
+                  Sign up
+                </Link>
+              </div>
+              
+              <div className="text-sm">
+                <Link href="/auth/forgot-password" className="text-primary hover:underline">
+                  Forgot your password?
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  )
+}
